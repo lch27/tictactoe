@@ -13,9 +13,6 @@ def player(board):
     count_X = sum(row.count(X) for row in board)
     count_O = sum(row.count(O) for row in board)
 
-    if terminal(board):
-        return None
-
     return X if count_X == count_O else O
 
 def actions(board):
@@ -32,19 +29,24 @@ def actions(board):
     return possible_actions
 
 def result(board, action):
-
     if action is None:
         raise ValueError("Invalid action: None")
 
     i, j = action
 
-    if board[i][j] != EMPTY:
-        raise ValueError("Invalid action")
+    # Print indices for debugging
+    print("i:", i, "j:", j)
 
-    new_board = copy.deepcopy(board)
-    new_board[i][j] = player(new_board)
-
-    return new_board
+    # Check if i and j are within the valid range
+    if 0 <= i < 3 and 0 <= j < 3:
+        if board[i][j] == EMPTY:
+            new_board = copy.deepcopy(board)
+            new_board[i][j] = player(new_board)
+            return new_board
+        else:
+            raise ValueError("Invalid action: Cell is not empty")
+    else:
+        raise ValueError("Invalid action: Indices out of range")
 
 
 def winner(board):
